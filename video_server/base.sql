@@ -21,7 +21,7 @@ create table comments (
     video_id VARCHAR(64),
     author_id INT UNSIGNED,
     content TEXT,
-    time DATETIME
+    time DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 create table sessions (
