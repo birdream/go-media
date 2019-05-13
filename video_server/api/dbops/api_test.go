@@ -12,7 +12,7 @@ var tempvid string
 func clearTables() {
 	dbConn.Exec("truncate users")
 	dbConn.Exec("truncate video_info")
-	// dbConn.Exec("truncate comments")
+	dbConn.Exec("truncate comments")
 	// dbConn.Exec("truncate sessions")
 }
 func TestMain(m *testing.M) {
@@ -126,6 +126,7 @@ func testListComments(t *testing.T) {
 		t.Errorf("Error of ListComments: %v", err)
 	}
 
+	fmt.Println(len(res))
 	for i, ele := range res {
 		fmt.Printf("comment: %d, %v \n", i, ele)
 	}

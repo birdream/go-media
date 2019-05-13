@@ -147,9 +147,9 @@ func AddNewComments(vid string, aid int, content string) error {
 }
 
 func ListComments(vid string, from, to int) ([]*defs.Comment, error) {
-	stmtOut, err := dbConn.Prepare(`SELECT comments.id, users.login_name, comments.conent FROM comments
+	stmtOut, err := dbConn.Prepare(` SELECT comments.id, users.Login_name, comments.content FROM comments
 		INNER JOIN users ON comments.author_id = users.id
-		WHERE comments.video_id = ? AND comments.time > FROM_UNIXTIME(?) AND coments.time <= FROM_UNIXTIME(?)`)
+		WHERE comments.video_id = ? AND comments.time > FROM_UNIXTIME(?) AND comments.time <= FROM_UNIXTIME(?)`)
 
 	var res []*defs.Comment
 
@@ -168,5 +168,6 @@ func ListComments(vid string, from, to int) ([]*defs.Comment, error) {
 		res = append(res, c)
 	}
 	defer stmtOut.Close()
+
 	return res, nil
 }
