@@ -1,19 +1,43 @@
 package main
 
 import (
+	"encoding/json"
+	"go-media/video_server/api/dbops"
+	"go-media/video_server/api/defs"
+	"go-media/video_server/api/session"
 	"io"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
 
-// CreateUser hello
 func CreateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	io.WriteString(w, "Create User Handler")
+	res, _ := ioutil.ReadAll(r.Body)
+	ubody := &defs.UserCredential{}
+
+	if err := json.Unmarshal(res, ubody); err != nil {
+		sendErrorResponse(w, defs.ErrorRequestBodyParseFailed)
+		return
+	}
+
+	if err := dbops.AddUserCredential(ubody.Username, ubody.Pwd); err != nil {
+		sendErrorResponse(w, defs.ErrorDBError)
+		return
+	}
+
+	id := session.GenerateNewSessionId(ubody.Username)
+	su := &defs.SignedUp{Success: true, SessionId: id}
+
+	if resp, err := json.Marshal(su); err != nil {
+		sendErrorResponse(w, defs.ErrorInternalFaults)
+		return
+	} else {
+		sendNormalResponse(w, string(resp), 201)
+	}
 }
 
-// Login login
 func Login(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	u_name := p.ByName("user_name")
-	io.WriteString(w, u_name)
+	uname := p.ByName("user_name")
+	io.WriteString(w, uname)
 }
