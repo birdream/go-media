@@ -1,7 +1,6 @@
 package taskrunner
 
 import (
-	"errors"
 	"log"
 	"testing"
 	"time"
@@ -29,6 +28,7 @@ func TestRunner(t *testing.T) {
 		}
 
 		return errors.New("Executor")
+		// return nil
 	}
 
 	runner := NewRunner(30, false, d, e)
