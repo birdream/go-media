@@ -1,6 +1,9 @@
 package taskrunner
 
-import "time"
+import (
+	"time"
+	//"log"
+)
 
 type Worker struct {
 	ticker *time.Ticker
@@ -24,4 +27,8 @@ func (w *Worker) startWorker() {
 }
 
 func Start() {
+	// Start video file cleaning
+	r := NewRunner(3, true, VideoClearDispatcher, VideoClearExecutor)
+	w := NewWorker(3, r)
+	go w.startWorker()
 }
